@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Temperature</title>
+    <link rel="stylesheet" media="screen" href="/css/main.css">
+    <script src="/js/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="/js/highcharts.js" type="text/javascript"></script>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h3>Temperatures</h3>
+
+<form id="filter">
+    City <input type="text" id="city">
+    <input type="submit" value="Filter">
+</form>
+
+<div id="container" style="height: 180px; margin: 0 auto"></div>
+<div id="events"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+    var feed;
+    var chart;
+    var series = [];
+    var open = function (city) {
+        if (feed) {
+            feed.close()
+        }
+
+        feed = new EventSource('/stream/' + city);
+
+
+        feed.onmessage = function (e) {
+            var data = JSON.parse(e.data);
+            $('#events').prepend("<p class='temp " + data.level + "'>[" + data.city + "] - temperature : " + data.temp + " °</p>");
+            if (typeof series !== 'undefined') {
+                console.log(data.date);
+                series.addPoint([(new Date()).getTime(), data.temp], true, true);
+            }
+        };
+        $('#events').find('p').addClass('disabled')
+    };
+
+    $(document).ready(function() {
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+
+        $('#container').highcharts({
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+                events: {
+                    load: function() {
+
+                        // set up the updating of the chart each second
+                        series = this.series[0];
+                    }
+                }
+            },
+            title: {
+                text: 'Live temperature'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Value'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                            Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+
+                            Highcharts.numberFormat(this.y, 2);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Random data',
+                data: (function() {
+                    // generate an array of random data
+                    var data = [],
+                            time = (new Date()).getTime(),
+                            i;
+
+                    for (i = -19; i <= 0; i++) {
+                        data.push({
+                            x: time + i * 1000,
+                            y: Math.random() * 40 - 10
+                        });
+                    }
+                    return data;
+                })()
+            }]
+        });
+
+
+        $('#filter').submit(function (e) {
+            e.preventDefault();
+            open($('#city').val());
+        }).submit()
+    });
+
+
+</script>
+
+</body>
+</html>
