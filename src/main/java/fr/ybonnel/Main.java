@@ -24,16 +24,28 @@ import fr.ybonnel.utils.FutureUtil;
 
 import java.util.stream.Stream;
 
-import static fr.ybonnel.simpleweb4j.SimpleWeb4j.get;
-import static fr.ybonnel.simpleweb4j.SimpleWeb4j.setPublicResourcesPath;
-import static fr.ybonnel.simpleweb4j.SimpleWeb4j.start;
+import static fr.ybonnel.simpleweb4j.SimpleWeb4j.*;
 import static fr.ybonnel.utils.FutureUtil.waitAndReturn;
 import static fr.ybonnel.utils.LambdaUtil.uncheck;
 
 public class Main {
 
 
+    private static int getPort() {
+        // Cloudbees
+        String cloudbeesPort = System.getProperty("app.port");
+        if (cloudbeesPort != null) {
+            return Integer.parseInt(cloudbeesPort);
+        }
+
+        // Default port;
+        return 9999;
+    }
+
+
     public static void main(String[] args) {
+
+        setPort(getPort());
 
         setPublicResourcesPath("/fr/ybonnel/public");
 
@@ -45,7 +57,6 @@ public class Main {
                 handler -> getEvents()
                         .filter(event -> routeParams.getParam("city").equals(event.getCity()))
                         .forEach(uncheck(handler::next))));
-
         start();
     }
 
