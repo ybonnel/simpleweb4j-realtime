@@ -17,16 +17,11 @@
 package fr.ybonnel;
 
 
-import fr.ybonnel.modele.Event;
+import fr.ybonnel.modele.TweetPhoto;
 import fr.ybonnel.simpleweb4j.handlers.Response;
 import fr.ybonnel.simpleweb4j.handlers.eventsource.ReactiveStream;
-import fr.ybonnel.utils.FutureUtil;
-
-import java.util.stream.Stream;
 
 import static fr.ybonnel.simpleweb4j.SimpleWeb4j.*;
-import static fr.ybonnel.utils.FutureUtil.waitAndReturn;
-import static fr.ybonnel.utils.LambdaUtil.uncheck;
 
 public class Main {
 
@@ -47,22 +42,15 @@ public class Main {
 
         setPort(getPort());
 
+        Events.routes();
+
         setPublicResourcesPath("/fr/ybonnel/public");
 
-        get("/stream", (param, routeParams) -> new Response<ReactiveStream<Event>>(
-                handler -> getEvents()
-                        .forEach(uncheck(handler::next))));
+        TwitterListenner listenner = new TwitterListenner("#Hollande");
+        listenner.startConsumeTwitter();
 
-        get("/stream/:city", (param, routeParams) -> new Response<ReactiveStream<Event>>(
-                handler -> getEvents()
-                        .filter(event -> routeParams.getParam("city").equals(event.getCity()))
-                        .forEach(uncheck(handler::next))));
+        get("/tweet", (param, routeParam) -> new Response<ReactiveStream<TweetPhoto>>(listenner::addHandler));
+
         start();
-    }
-
-    private static Stream<Event> getEvents() {
-        return Stream.generate(
-                () -> waitAndReturn(Event::new))
-                .map(FutureUtil::<Event>getContentOfFuture);
     }
 }

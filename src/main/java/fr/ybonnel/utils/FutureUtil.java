@@ -22,7 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
 
-import static fr.ybonnel.utils.LambdaUtil.uncheck;
+import static fr.ybonnel.utils.LambdaUtil.uncheckRunnable;
+import static fr.ybonnel.utils.LambdaUtil.uncheckSupplier;
 
 public class FutureUtil {
 
@@ -31,11 +32,11 @@ public class FutureUtil {
     private static Random random = new Random();
 
     private static void waitSomeTime() {
-        uncheck(() -> Thread.sleep(500 + random.nextInt(500))).run();
+        uncheckRunnable(() -> Thread.sleep(500 + random.nextInt(500))).run();
     }
 
     public static <T> T getContentOfFuture(Future<T> future) {
-        return uncheck((LambdaUtil.SupplierWithException<T>) future::get).get();
+        return uncheckSupplier((LambdaUtil.SupplierWithException<T>) future::get).get();
     }
 
     public static <T> Future<T> waitAndReturn(Supplier<T> supplier) {

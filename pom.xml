@@ -11,7 +11,6 @@
 
 
 	<properties>
-		<project.java.version>1.8</project.java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -24,8 +23,8 @@
 				<version>3.0</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
-					<source>${project.java.version}</source>
-					<target>${project.java.version}</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -73,6 +72,11 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-stream</artifactId>
+			<version>3.0.5</version>
 		</dependency>
 	</dependencies>
 

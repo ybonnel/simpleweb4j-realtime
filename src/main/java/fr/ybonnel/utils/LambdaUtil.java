@@ -43,7 +43,7 @@ public class LambdaUtil {
         void run() throws Exception;
     }
 
-    public static <T> Supplier<T> uncheck(SupplierWithException<T> supplier) {
+    public static <T> Supplier<T> uncheckSupplier(SupplierWithException<T> supplier) {
         return () -> {
             try {
                 return supplier.get();
@@ -53,7 +53,7 @@ public class LambdaUtil {
         };
     }
 
-    public static <T, R> Function<T, R> uncheck(FunctionWithException<T, R> function) {
+    public static <T, R> Function<T, R> uncheckFunction(FunctionWithException<T, R> function) {
         return (param) -> {
             try {
                 return function.apply(param);
@@ -63,7 +63,7 @@ public class LambdaUtil {
         };
     }
 
-    public static <T> Consumer<T> uncheck(ConsumerWithException<T> consumer) {
+    public static <T> Consumer<T> uncheckConsumer(ConsumerWithException<T> consumer) {
         return (param) -> {
             try {
                 consumer.accept(param);
@@ -73,7 +73,7 @@ public class LambdaUtil {
         };
     }
 
-    public static Runnable uncheck(RunnableWithException runnable) {
+    public static Runnable uncheckRunnable(RunnableWithException runnable) {
         return () -> {
             try {
                 runnable.run();

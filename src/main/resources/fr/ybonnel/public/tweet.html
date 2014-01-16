@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Tweet from devoxx</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link href="/css/tweet.css" rel="stylesheet">
+
+</head>
+<body ng-app>
+
+
+<div ng-controller="TweetCtrl">
+
+    <ul id="images">
+        <li ng-repeat="tweet in tweets">
+            <div class="tweet">
+                <div class="user">
+                    <div class="avatar">
+                        <img ng-src="{{tweet.avatar}}"/>
+                    </div>
+                    <div class="name">@{{tweet.user}}</div>
+                </div>
+                <img class="photo" ng-src="{{tweet.photo}}"/>
+                <div class="text">
+                    {{tweet.text}}
+                </div>
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<script type="text/javascript">
+    function TweetCtrl($scope, $http) {
+
+        // the last received msg
+        $scope.tweets = [];
+
+        // handles the callback from the received event
+        var handleCallback = function (msg) {
+            $scope.$apply(function () {
+                $scope.tweets.push(JSON.parse(msg.data));
+            });
+        };
+
+        var source = new EventSource('/tweet');
+        source.addEventListener('message', handleCallback, false);
+
+    }
+</script>
+</body>
+</html>
