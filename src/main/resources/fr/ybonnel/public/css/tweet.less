@@ -29,7 +29,11 @@ body {
         display: inline-block;
         width: 5px;
         -webkit-perspective: 500px;
+        -moz-perspective: 500px;
+        perspective: 500px;
         -webkit-transition: all 1s ease;
+        -moz-transition: all 1s ease;
+        transition: all 1s ease;
 
         div.tweet {
 
@@ -65,12 +69,18 @@ body {
             width: 400px;
           }
           -webkit-transform: rotateY(50deg) scale(.9);
+          -moz-transform: rotateY(50deg) scale(.9);
+          transform: rotateY(50deg) scale(.9);
           -webkit-transition: all 1s ease;
+          -moz-transition: all 1s ease;
+          transition: all 1s ease;
         }
         &:last-child {
           padding-left: 350px;
           div.tweet {
             -webkit-transform: none;
+            -moz-transform: none;
+            transform: none;
           }
         }
       }

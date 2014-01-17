@@ -27,11 +27,19 @@ body div#container ul#images li {
   display: inline-block;
   width: 5px;
   -webkit-perspective: 500px;
+  -moz-perspective: 500px;
+  perspective: 500px;
   -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  transition: all 1s ease;
 }
 body div#container ul#images li div.tweet {
   -webkit-transform: rotateY(50deg) scale(0.9);
+  -moz-transform: rotateY(50deg) scale(0.9);
+  transform: rotateY(50deg) scale(0.9);
   -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  transition: all 1s ease;
 }
 body div#container ul#images li div.tweet img.photo {
   width: 400px;
@@ -68,4 +76,6 @@ body div#container ul#images li:last-child {
 }
 body div#container ul#images li:last-child div.tweet {
   -webkit-transform: none;
+  -moz-transform: none;
+  transform: none;
 }
