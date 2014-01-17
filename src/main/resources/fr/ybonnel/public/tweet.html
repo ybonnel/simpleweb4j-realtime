@@ -12,7 +12,11 @@
 <body ng-app>
 
 
-<div ng-controller="TweetCtrl">
+<div id="container" ng-controller="TweetCtrl">
+
+    <div id="loading" ng-show="tweets.length == 0">
+        <div>Waiting tweets with photos...</div>
+    </div>
 
     <ul id="images">
         <li ng-repeat="tweet in tweets">
@@ -36,7 +40,7 @@
 
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
+<script src="/webjars/angularjs/1.2.8/angular.min.js"></script>
 <script type="text/javascript">
     function TweetCtrl($scope, $http) {
 
